@@ -10,17 +10,17 @@ In eLeaf model, 3D reconstruction was achieved through COMSOL Multiphysics and M
 ### - Prerequisites
 Here we used a tower workstation (2x Intel Xeon E5 2650v4; 48 Cores; 128GB RAM) with CentOS 7 operating system.
 
-1. COMSOL Multiphyscis:
+1) COMSOL Multiphyscis:
 - COMSOL version >= 5.3
-- Required modules of COMSOL: 
+- Required modules of COMSOL:   
 -- CFD module
 -- CAD import module
 -- LiveLink for MATLAB module
 
-2. MATLAB:
+2) MATLAB:
 - Any compatible MATLAB, we used MATLAB 2015b.
 
-3. gcc:
+3) gcc:
 - We used 4.8.5.
 
 ## Versioning
