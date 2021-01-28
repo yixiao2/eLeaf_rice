@@ -1,5 +1,8 @@
 # Three Dimensional Modelling of Rice Leaf Photosynthesis
 eLeaf is an end-to-end 3D modelling tool for rice leaf photosynthesis. Users just need to input a list of anatomical and biochemical parameters, run a single line of code in MATLAB, then eLeaf will automatically 1) reconstruct a representative 3D leaf anatomy, 2) simulate the light absorption profile with a raytracing algorithm, 3) simulate the reaction-diffusion system of CO2 inside the leaf. 
+<p align="center">
+	<img src="https://raw.githubusercontent.com/wiki/xiaoyizz78/eLeaf_rice/pic/eLeaf_rice_animation.gif" width="800" height="450"> 
+</p>
 
 **[Reference]**
 Xiao Y, Sloan J, Hepworth C, Fradera-Soler M, Mathers A, Thorley R, Baillie A, Jones H, Chang TG, Osborne CP, Chen XY, Sturrock C, Mooney S, Fleming AJ, Zhu X-G. Identifying leaf structure for improved rice performance via eLeaf, an integrated spatial model of photosynthesis. (2021) under review.
