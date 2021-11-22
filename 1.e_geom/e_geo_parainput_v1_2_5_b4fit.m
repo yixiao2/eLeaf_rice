@@ -88,9 +88,11 @@ end
 
 if select_com(8)==0
     chl_con=0.000543;% 9th; chl content mg/mm2
+    chl_con_ratio_BvM=1;% ratio
 else
     %% replace 3.chlorophyll content
     chl_con=0.000551;% 9th; chl content mg/mm2
+    chl_con_ratio_BvM=1;
     %% end replace
 end
 

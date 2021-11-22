@@ -1178,8 +1178,20 @@ for loop_i=1:count_msvac
     ply_write(data,tmp_filename,'ascii','double');
 end
 
-fid=fopen('count_chl','w');
-fprintf(fid,'%d\n',count_mschl(:));
+%convert [chl] from mg m-2 to g/m3
+% ([chl]*1e-3)/(AVR)
+% chl_con=463.4425;%mg/m2
+load save_e_geom.mat bsc_chlo_vol msc_chlo_vol leaf_surface_area
+chl_con_ratio_BvM=1.0;
+%%% eqn1:
+% (chl_BSC*chlo_vol_BSC+chl_MSC*chlo_vol_MSC)/leaf_surface_area=chl_con*1e3
+chl_con_MSC_4RT=chl_con*1e3*leaf_surface_area/(chl_con_ratio_BvM*bsc_chlo_vol+msc_chlo_vol);
+chl_con_BSC_4RT=chl_con_MSC_4RT*chl_con_ratio_BvM;
+
+fid=fopen('count_chl4RT','w');
+fprintf(fid,'%d %d\n', 1, count_mscell-1);
+fprintf(fid,'%d %e\n',[count_mschl(1);chl_con_BSC_4RT]);
+fprintf(fid,'%d %e\n',[count_mschl(2:end);chl_con_MSC_4RT*ones(1,count_mscell-1)]);
 fclose(fid);
 
 save save_raytracing.mat -regexp '^(?!(model|ans)$).'
