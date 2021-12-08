@@ -1,7 +1,7 @@
 % eLeaf: 3D model of rice leaf photosynthesis
 % @license: LGPL (GNU LESSER GENERAL PUBLIC LICENSE Version 3)
 % @author: Yi Xiao <yixiao20@outlook.com>
-% @version: 1.2.5
+% @version: 1.2.6
 
 %% design of mesophyll cell
 function [tmp_wallString,tmp_chloString,tmp_chliString,tmp_IDXxse,tmp_IDXyse]=msoutline_v1_2(tmp_Nlobe,dw,dse,epsln)

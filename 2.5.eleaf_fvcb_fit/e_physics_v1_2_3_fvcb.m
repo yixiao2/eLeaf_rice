@@ -1,7 +1,7 @@
 % eLeaf: 3D model of rice leaf photosynthesis
 % @license: LGPL (GNU LESSER GENERAL PUBLIC LICENSE Version 3)
 % @author: Yi Xiao <yixiao20@outlook.com>
-% @version: 1.2.5
+% @version: 1.2.6
 
 tic
 %path('C:\Program Files\COMSOL\COMSOL52a\Multiphysics\mli',path)
@@ -411,7 +411,7 @@ model.param.set('Dcenv', 'Pco2*tcenv', 'chloro envenloppe diff constant');
 model.param.set('tcenv', 'tmenv', 'chloro enveloppe thickness');
 model.param.set('stdT','273.15[K]+25[K]');
 model.param.set('R','8.31[J/K/mol]');
-model.param.set('Dair','0.148[cm^2/s]*(stdT/282[K])^(3/2)');
+model.param.set('Dair_true','0.1381[cm^2/s]*(stdT/282[K])^(1.81)');%% Massman 1998
 model.param.set('Vair','Dc/Dair*sc*R*stdT');
 model.param.set('Vchl', '10', 'relative viscosity chloroplasts');
 model.param.set('Vmit', 'Vchl', 'relative viscos mitochondria');
@@ -426,7 +426,7 @@ model.param.set('Phco3', '5e-7[m/s]', 'chl mem permeability hco3');
 model.param.set('Phco3_m', '5e-7[m/s]', 'mit mem permeability hco3');
 model.param.set('Dmenvb', 'Phco3_m*tmenv', 'hco3 diffusion constant mit mem');
 model.param.set('K_bak', '1.35e-3[mol/m^3]', 'Gamma-star');
-model.param.set('sc', '0.33e-3[mol/m^3/Pa]', 'solubility co2');
+model.param.set('sc', '0.33e-3[mol/m^3/Pa]', 'solubility co2');%% c=p*sc
 model.param.set('Pair', '100[kPa]', 'air pressure');
 model.param.set('pHc', '7.3', 'pH cytosol');
 %model.param.set('leafsurface2', '(1.22e-5*2*5e-6*2)[m^2]', 'my estimate of model leaf area');
@@ -434,7 +434,9 @@ model.param.set('leafsurface', '(BSE_width/2+EPU_width+BUT_width/2)*LEAF_z');
 model.param.set('v1_stable', '1.2336648[mol/(m^3*s)]');
 model.param.set('so', '1.26[mol/m^3/bar]', 'oxygen solubility');
 model.param.set('Ci_gas', '0.01[mol/m^3]');
-model.param.set('Ci','Ci_gas*sc*R*stdT');
+model.param.set('Ci','Ci_gas*R*stdT*sc');%%trick to handle gas phase and liquid phase;
+model.param.set('Dair','Dair_true/R/stdT/sc');%% Massman 1998
+%% [Causion], output C --> convert to partial pressure, C/sc. Partial pressure is continous. So concentration of true gaseous Ci_gas = Ci/sc/RT
 model.param.set('ppi', 'Ci/sc');
 model.param.set('irra', '1000[umol/m^2/s]');
 model.param.set('O2', 'pO2*so');
