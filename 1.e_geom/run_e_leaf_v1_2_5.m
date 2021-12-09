@@ -101,8 +101,8 @@ fileID=fopen('Defs.h','a');
 load save_e_geom.mat xmax xmin ymax ymin zmax zmin
 fprintf(fileID,'#define xmax %e\n#define xmin %e\n#define zmax %e\n#define zmin %e\n#define ymax %e\n#define ymin %e\n\n',xmax,xmin,zmax,zmin,ymax,ymin);
 fprintf(fileID,'#define bsc_num 1\n#define msc_num %d\n#define msall_num (bsc_num+msc_num)\n',count_MSC);
-fprintf(fileID,'int count_ms;\nint count_nonms;\n#define ms_max_chl_num %d\nint ms_chl_num[msall_num];\ndouble ms_chl_con[msall_num]\n#define nonms_num %d\n\n',max(count_mschl),count_nscell);
-fprintf(fileID,'Object *p_cell_ms[ms_num];\nObject *p_chl_ms[ms_num][ms_max_chl_num];\nObject *p_vac_ms[ms_num];\nObject *p_leaf;\nObject *p_cell_ns[num_nonMS];\n\n');
+fprintf(fileID,'int count_ms;\nint count_nonms;\n#define ms_max_chl_num %d\nint ms_chl_num[msall_num];\ndouble ms_chl_con[msall_num];\n#define nonms_num %d\n\n',max(count_mschl),count_nscell);
+fprintf(fileID,'Object *p_cell_ms[msall_num];\nObject *p_chl_ms[msall_num][ms_max_chl_num];\nObject *p_vac_ms[msall_num];\nObject *p_leaf;\nObject *p_cell_ns[nonms_num];\n\n');
 fprintf(fileID,'#endif\n');
 fclose(fileID);
 copyfile('Defs.h','../');

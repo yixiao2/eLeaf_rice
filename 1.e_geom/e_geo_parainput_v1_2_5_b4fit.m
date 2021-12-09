@@ -22,7 +22,7 @@ function e_geo_parainput_v1_2_5_b4fit(CFG_PARA_COM)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 0 for CKIR64; 1 for HCIR64
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%select_com=input('selection (e.g [1 1 0 0 0 0 0 0]):');
+%select_com=input('selection (e.g [1 1 0 0 0 0 0 0 0]):');
 select_com=CFG_PARA_COM;
 if size(select_com,2)~=9
     disp('input selection error');
@@ -55,13 +55,13 @@ end
 
     %EPL_thick=EPU_thick=(Leaf Thickness-Mesophyll Thickness)/2
     EPL_thick=(LEAF_thickatvein-MST_thickatvein)/2;
-    EPL_thick=double(vpa(EPL_thick,4));% 4 digits
+    %EPL_thick=double(vpa(EPL_thick,4));% 4 digits
     EPU_thick=EPL_thick
     %BU_thick=Leaf Thickness at bulliform-mesophyll thickness at bulliform-EPL_thick
     BU_thick=LEAF_thickatBU-MST_thickatBU-EPL_thick;
     BS_thick=BS_min_width;
     VEIN_r=(BS_area/pi-BS_min_width^2)/(2*BS_min_width);
-    VEIN_r=double(vpa(VEIN_r,4));
+    %VEIN_r=double(vpa(VEIN_r,4));
     if VEIN_r<0 || (VEIN_r+BS_min_width)*2>MST_thickatvein
         display('Please check leaf level anatomical parameters');
         %    break;
@@ -73,7 +73,7 @@ end
 
 %BS_chlo_thick=2e-6; x^2-tmp_B*x+tmp_C=0
 BS_dthick=1e-6;
-tmp_C=BS_plastid_volume*((VEIN_r+BS_thick)^2-(VEIN_r)^2);
+tmp_C=BS_plastid_volume*((VEIN_r+BS_thick)^2-VEIN_r^2);
 tmp_B=2*(VEIN_r+BS_thick-BS_dthick);
 BS_chlo_thick=(tmp_B-sqrt(tmp_B^2-4*tmp_C))/2;
 
@@ -203,9 +203,7 @@ end
 
 MS_dthick=1e-6;
 BS_dthick=1e-6;
-BS_chlo_thick=2e-6;
-% LEAF_z=15e-6;
-% BS_chlo_z=10e-6;
+
 BS_mito_l=2e-6;
 BS_mito_r=0.5e-6;
 

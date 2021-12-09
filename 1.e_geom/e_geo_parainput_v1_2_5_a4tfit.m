@@ -73,9 +73,11 @@ end
 
 if select_com(8)==0
     chl_con=0.000543;% 9th; chl content mg/mm2
+    chl_con_ratio_BvM=1;% ratio
 else
     %% replace 3.chlorophyll content
     chl_con=0.000551;% 9th; chl content mg/mm2
+    chl_con_ratio_BvM=1;
     %% end replace
 end
 
@@ -119,10 +121,12 @@ end
 
 if select_com(6)==0
     %for e_physics
-    cellwallthick=0.16;% 14th
+    %cellwallthick=0.16;% 14th
+    cellwallthick=0.217565;
 else
     %% replace 6.wallthick
-    cellwallthick=0.17414763;%14th
+    %cellwallthick=0.17414763;%14th
+    cellwallthick=0.229958;
     %% end replace 6
 end
 
@@ -187,11 +191,14 @@ else
 end
 
 MS_dthick=1e-6;
+BS_dthick=1e-6;
+
 BS_mito_l=2e-6;
 BS_mito_r=0.5e-6;
 
 Nlobe=8;
 dw=0.05;
+%dse=0.5;
 dvaz=0.1;
 
 save parainput.mat
