@@ -283,7 +283,7 @@ count_uni=count_uni+1;
 model.geom('geom1').feature(tmptag_uni).selection('input').set({'ext1(1)' 'ext1(2)'});
 model.geom('geom1').feature(tmptag_uni).set('keep', 'on');
 model.geom('geom1').feature(tmptag_uni).set('intbnd', 'off');
-ms_cell_list=cellstr(tmptag_uni);
+ms_cell_list=cellstr(tmptag_uni);//add BS as No.1 
 count_dellist=count_dellist+1;
 del_list(count_dellist)=cellstr('ext1(2)');
 
@@ -500,7 +500,7 @@ count_copy=1;
 % count_dif=3;
 count_del=2;
 %count_uni=2;
-count_MSC=1;
+count_MSC=0;
 load tmp_IAS2D.mat ms_distribution
 % load 0000.mat ms_distribution
 for loop_i=1:N_ms_rows
@@ -812,6 +812,8 @@ for loop_i=1:N_ms_rows
                                                     prep_CreSel(count_list_cresel,1)=count_list_cresel;
                                                     prep_CreSel(count_list_cresel,2)=1;
                                                     %%%change selection name
+                                                    count_MSC
+                                                    count_MSC=count_MSC+1;
                                                     tmp_str=['ms',num2str(count_MSC),'_vac'];
                                                     model.geom('geom1').feature(tmptag_vac1).name(tmp_str);
                                                     tmp_str=['ms',num2str(count_MSC),'_chl'];
@@ -821,8 +823,6 @@ for loop_i=1:N_ms_rows
                                                     tmp_str=['ms',num2str(count_MSC),'_cyt'];
                                                     model.geom('geom1').feature(tmptag_mscyt).name(tmp_str);
                                                     tmptag_IASinput2(count_MSC)=cellstr(tmptag_msw0);
-                                                    count_MSC
-                                                    count_MSC=count_MSC+1;
                                                     %%%delete
                                                     tmptag_del=['del',num2str(count_del)];
                                                     model.geom('geom1').feature.create(tmptag_del, 'Delete');

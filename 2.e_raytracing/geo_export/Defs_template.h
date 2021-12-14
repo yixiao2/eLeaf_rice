@@ -88,7 +88,7 @@ typedef struct t_ray
 	int outin_P;// 1=P is on the inner side of obj; 0=P is on the outter surface of obj
 }Ray;
 
-#define Infinity 1.7E+308
+#define Infinity 1000//1.7E+308
 
 #define PI 3.141592653589793
 
