@@ -283,7 +283,7 @@ count_uni=count_uni+1;
 model.geom('geom1').feature(tmptag_uni).selection('input').set({'ext1(1)' 'ext1(2)'});
 model.geom('geom1').feature(tmptag_uni).set('keep', 'on');
 model.geom('geom1').feature(tmptag_uni).set('intbnd', 'off');
-ms_cell_list=cellstr(tmptag_uni);//add BS as No.1 
+ms_cell_list=cellstr(tmptag_uni);%%add BS as No.1 
 count_dellist=count_dellist+1;
 del_list(count_dellist)=cellstr('ext1(2)');
 
