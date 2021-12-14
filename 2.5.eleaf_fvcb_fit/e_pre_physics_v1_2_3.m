@@ -12,19 +12,20 @@ tmp_ab_profile=zeros(2,size(count_mschl,2));
 
 tmp_rtsum=importdata('results_merged_rtsum_475nm_500x_rep1');
 tmp_ab_chlo_results=importdata('results_merged_absrf_475nm_500x_rep1');
-ab_chlo_new_tmp_ab_profile(1,:)=tmp_ab_chlo_results(tmp_ab_chlo_results(:,3)==1,7)/(tmp_rtsum.data(5));
+tmp_ab_profile(1,:)=tmp_ab_chlo_results(tmp_ab_chlo_results(:,3)==1,7)/(tmp_rtsum.data(5));
 spectrum_retrab(1,1)=tmp_rtsum.data(2)/tmp_rtsum.data(5);%re;
 spectrum_retrab(1,2)=tmp_rtsum.data(3)/tmp_rtsum.data(5);%re;
 spectrum_retrab(1,3)=tmp_rtsum.data(1)/tmp_rtsum.data(5);%re;
 
 tmp_rtsum=importdata('results_merged_rtsum_625nm_500x_rep1');
 tmp_ab_chlo_results=importdata('results_merged_absrf_625nm_500x_rep1');
-ab_chlo_new_tmp_ab_profile(2,:)=tmp_ab_chlo_results(tmp_ab_chlo_results(:,3)==1,7)/(tmp_rtsum.data(5));
+tmp_ab_profile(2,:)=tmp_ab_chlo_results(tmp_ab_chlo_results(:,3)==1,7)/(tmp_rtsum.data(5));
 spectrum_retrab(2,1)=tmp_rtsum.data(2)/tmp_rtsum.data(5);%re;
 spectrum_retrab(2,2)=tmp_rtsum.data(3)/tmp_rtsum.data(5);%re;
 spectrum_retrab(2,3)=tmp_rtsum.data(1)/tmp_rtsum.data(5);%re;
 
-
 ab_profile=[0.1,0.9]*tmp_ab_profile;
-bar(tmp_ab_profile')
+ab_all=sum(ab_profile);
+
+%bar(tmp_ab_profile')
 save('ab_profile.mat','ab_profile')
