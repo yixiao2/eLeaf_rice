@@ -14,6 +14,9 @@ if size(select_com,2)~=9
     return;
 end
 
+GLB_digits=10;% digits to keep in COMSOL and MATLAB. Also used when passing values to 'parameters' in COMSOL
+% Added to keep robustness of ray tracing.
+
 if select_com(1)==0
     MST_thickatBU=31.40326721e-6;%1st
     MST_thickatvein=64.42342204e-6;%2nd
@@ -27,6 +30,11 @@ else
     LEAF_thickatBU=71.30234e-6;%4th
     VEIN_width=200.4024e-6;%7th
 end
+MST_thickatBU=str2num(num2str(MST_thickatBU,GLB_digits));% later use same GLB_digits when passing to 'parameters' in COMSOL
+MST_thickatvein=str2num(num2str(MST_thickatvein,GLB_digits));
+LEAF_thickatvein=str2num(num2str(LEAF_thickatvein,GLB_digits));
+LEAF_thickatBU=str2num(num2str(LEAF_thickatBU,GLB_digits));
+VEIN_width=str2num(num2str(VEIN_width,GLB_digits));
 
 if select_com(2)==0
     BS_min_width=9.6540668e-6;%5th
@@ -38,30 +46,38 @@ else
     BS_plastid_volume=0.1176085;
 end
 
-    %EPL_thick=EPU_thick=(Leaf Thickness-Mesophyll Thickness)/2
-    EPL_thick=(LEAF_thickatvein-MST_thickatvein)/2;
-    %EPL_thick=double(vpa(EPL_thick,4));% 4 digits
-    EPU_thick=EPL_thick
-    %BU_thick=Leaf Thickness at bulliform-mesophyll thickness at bulliform-EPL_thick
-    BU_thick=LEAF_thickatBU-MST_thickatBU-EPL_thick;
-    BS_thick=BS_min_width;
-    VEIN_r=(BS_area/pi-BS_min_width^2)/(2*BS_min_width);
-    %VEIN_r=double(vpa(VEIN_r,4));
-    if VEIN_r<0 || (VEIN_r+BS_min_width)*2>MST_thickatvein
-        display('Please check leaf level anatomical parameters');
-        %    break;
-    end
-    BSE_width=VEIN_r*2;
-    EPU_width=(VEIN_width-BSE_width)/2/2;
-    BUT_width=(VEIN_width-BSE_width)/2;
-    VEIN_l=LEAF_thickatvein/2;
-
+%EPL_thick=EPU_thick=(Leaf Thickness-Mesophyll Thickness)/2
+EPL_thick=(LEAF_thickatvein-MST_thickatvein)/2;
+EPU_thick=EPL_thick;
+%BU_thick=Leaf Thickness at bulliform-mesophyll thickness at bulliform-EPL_thick
+BU_thick=LEAF_thickatBU-MST_thickatBU-EPL_thick;
+BS_thick=BS_min_width;
+VEIN_r=(BS_area/pi-BS_min_width^2)/(2*BS_min_width);
+%VEIN_r=double(vpa(VEIN_r,4));
+if VEIN_r<0 || (VEIN_r+BS_min_width)*2>MST_thickatvein
+    display('Please check leaf level anatomical parameters');
+    %    break;
+end
+BSE_width=VEIN_r*2;
+EPU_width=(VEIN_width-BSE_width)/2/2;
+BUT_width=(VEIN_width-BSE_width)/2;
+VEIN_l=LEAF_thickatvein/2;
 %BS_chlo_thick=2e-6; x^2-tmp_B*x+tmp_C=0
 BS_dthick=1e-6;
 tmp_C=BS_plastid_volume*((VEIN_r+BS_thick)^2-VEIN_r^2);
 tmp_B=2*(VEIN_r+BS_thick-BS_dthick);
 BS_chlo_thick=(tmp_B-sqrt(tmp_B^2-4*tmp_C))/2;
 
+EPL_thick=str2num(num2str(EPL_thick,GLB_digits));
+EPU_thick=str2num(num2str(EPU_thick,GLB_digits));
+BU_thick=str2num(num2str(BU_thick,GLB_digits));
+BS_thick=str2num(num2str(BS_thick,GLB_digits));
+VEIN_r=str2num(num2str(VEIN_r,GLB_digits));
+BSE_width=str2num(num2str(BSE_width,GLB_digits));
+EPU_width=str2num(num2str(EPU_width,GLB_digits));
+BUT_width=str2num(num2str(BUT_width,GLB_digits));
+VEIN_l=str2num(num2str(VEIN_l,GLB_digits));
+BS_chlo_thick=str2num(num2str(BS_chlo_thick,GLB_digits));
 
 if select_com(3)==0
     IAS_3D_input=0.0802;% 8th; relative to whole leaf in 3D
@@ -110,6 +126,9 @@ else
     %distance for rho: 1/sqrt(3)*rho*(scale_x+scale_y)/2
     %% end replace 4
 end
+cell_length=str2num(num2str(cell_length,GLB_digits));
+cell_height=str2num(num2str(cell_height,GLB_digits));
+%cell_thick in e_geo_MS3D.m
 
 if select_com(7)==0
     SmS=0.316251875;% 13th; CW touching another cell / total external CW length
