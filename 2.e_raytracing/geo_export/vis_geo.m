@@ -37,7 +37,7 @@ end
 axis equal;
 
 %% plot RT_file4plto
-tmp_paths_all=load('../test_plot4RT');
+tmp_paths_all=load('../test_plot4RT');%%need to change Defs.h to get this file
 tmp_idx=find(tmp_paths_all(:,1)==80&tmp_paths_all(:,2)==10);
 plot3(tmp_paths_all(tmp_idx,3),tmp_paths_all(tmp_idx,4),tmp_paths_all(tmp_idx,5),'r-o','linewidth',1);hold on;
 axis equal

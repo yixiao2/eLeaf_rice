@@ -812,7 +812,7 @@ for loop_i=1:N_ms_rows
                                                     prep_CreSel(count_list_cresel,1)=count_list_cresel;
                                                     prep_CreSel(count_list_cresel,2)=1;
                                                     %%%change selection name
-                                                    count_MSC
+                                                    %count_MSC
                                                     count_MSC=count_MSC+1;
                                                     tmp_str=['ms',num2str(count_MSC),'_vac'];
                                                     model.geom('geom1').feature(tmptag_vac1).name(tmp_str);
@@ -843,12 +843,13 @@ for loop_i=1:N_ms_rows
                                                     model.geom('geom1').feature(tmptag_spl).selection('input').set(tmptag_chl1);
                                                     model.geom('geom1').feature(tmptag_spl).set('keep', 'on');
                                                     model.geom('geom1').run(tmptag_spl);
-                                                    tmp=size(model.geom('geom1').feature(tmptag_spl).objectNames(),1)
+                                                    tmp=size(model.geom('geom1').feature(tmptag_spl).objectNames(),1);
                                                     if(tmp==1)
                                                         ms_chl_list{count_mscell}=cellstr(tmptag_chl1);
                                                         count_mschl(count_mscell)=1;
                                                         model.geom('geom1').feature.remove(tmptag_spl);
                                                     else
+                                                        disp(['[Warning]: More than 1 chloroplast obj generated for MSC cell No.',num2str(count_MSC),'.'])
                                                         ms_chl_list{count_mscell}=cellstr(char(model.geom('geom1').feature(tmptag_spl).objectNames()))';
                                                         count_mschl(count_mscell)=tmp;
                                                         flag_del_spl=0;

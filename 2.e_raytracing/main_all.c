@@ -47,7 +47,7 @@ int main(int argc, char **argv)
 	{
 		if((fout_file4plot=fopen(*++argv,"wb"))==NULL)
 		{
-			printf("error on open file results_debuglog_?.txt\n");
+			printf("error on open file results_RTfile4plot_?.txt\n");
 		}
 	}
 	

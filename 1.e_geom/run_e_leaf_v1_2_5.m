@@ -179,6 +179,12 @@ for loop_x=1:num_loop_x
     end
 end
 failed_threads{rep_num}=find(record_success==0);
+
+if numel(failed_threads{rep_num})/(num_loop_x*num_loop_y)>0.05
+    %%error('High fail rate during ray tracing.')
+    disp('[Warning]: High fail rate during ray tracing.')
+end
+
 %% trace_recal --> ab profiles under 475nm and 625nm
 num_layer4lightprofile=10;
 %% SAC_licor_blue475nm=[1.14e-4*100, 4.26e4*1e-4];
@@ -217,6 +223,12 @@ tmp_bash_cmd=['./trace_recal ',num2str(SAC_licor_red625nm(1)),' ',num2str(SAC_li
     'results_merged_abprofile_625nm_500x_rep',num2str(rep_num),'_layerN',num2str(num_layer4lightprofile),' ',...
     'results_merged_rtsum_625nm_500x_rep',num2str(rep_num)];
 system(tmp_bash_cmd)
+
+%% tar intermediate files from ray tracing
+system('tar -zcvf results_files_abevents.tar.gz results_abevents_* --remove-files');
+system('tar -zcvf results_files_srf.tar.gz results_srf_* --remove-files');
+system('tar -zcvf results_files_sum.tar.gz results_sum_* --remove-files');
+system('tar -zcvf results_files_RTlog.tar.gz results_RTlog_* --remove-files');
 
 %% run e-physics
 load ../1.e_geom/CFG.mat
