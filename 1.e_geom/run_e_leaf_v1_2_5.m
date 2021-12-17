@@ -225,10 +225,10 @@ tmp_bash_cmd=['./trace_recal ',num2str(SAC_licor_red625nm(1)),' ',num2str(SAC_li
 system(tmp_bash_cmd)
 
 %% tar intermediate files from ray tracing
-system('tar -zcvf results_files_abevents.tar.gz results_abevents_* --remove-files');
-system('tar -zcvf results_files_srf.tar.gz results_srf_* --remove-files');
-system('tar -zcvf results_files_sum.tar.gz results_sum_* --remove-files');
-system('tar -zcvf results_files_RTlog.tar.gz results_RTlog_* --remove-files');
+system('tar -zcf results_files_abevents.tar.gz results_abevents_* --remove-files');% tar -zxvf ***.tar.gz; -v = output log
+system('tar -zcf results_files_srf.tar.gz results_srf_* --remove-files');
+system('tar -zcf results_files_sum.tar.gz results_sum_* --remove-files');
+system('tar -zcf results_files_RTlog.tar.gz results_RTlog_* --remove-files');
 
 %% run e-physics
 load ../1.e_geom/CFG.mat
