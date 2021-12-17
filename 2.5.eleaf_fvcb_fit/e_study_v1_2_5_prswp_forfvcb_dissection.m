@@ -24,12 +24,12 @@ for loop_std=[1,2]%1:4
         tmp_study(1,:)=[50,80,120,150,230,290,360,500,650,720,890,1150]/10*0.33e-3;
         tmp_study(2,:)=2000.0*1e-6*ones(1,12);
     end
-    tmp_std1{1}=num2str(tmp_study(1,:));
-    tmp_std1{2}=num2str(tmp_study(2,:));
+    tmp_std1{1}=num2str(tmp_study(1,:),GLB_digits);
+    tmp_std1{2}=num2str(tmp_study(2,:),GLB_digits);
     if loop_std==1||loop_std==2 %% study1 and study2 are normal O2
-        tmp_std1{3}=num2str(ones(size(tmp_study(1,:)))*21000);
+        tmp_std1{3}=num2str(ones(size(tmp_study(1,:)))*21000,GLB_digits);
     else
-        tmp_std1{3}=num2str(ones(size(tmp_study(1,:)))*2100);
+        tmp_std1{3}=num2str(ones(size(tmp_study(1,:)))*2100,GLB_digits);
     end
     tmpstr_std=['std',num2str(loop_std)];
     model.study.create(tmpstr_std);

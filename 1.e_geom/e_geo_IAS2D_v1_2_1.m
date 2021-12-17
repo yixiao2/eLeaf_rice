@@ -88,7 +88,7 @@ model.param.set('dvaz', num2str(dvaz));
 %cell_height=10.6;%unit um
 %cell_volume=1783;%unit um^3
 %calculate cell_thick in z axis
-cell_thick=round(cell_volume*3/4/pi/cell_length*2/cell_height*2*2,,GLB_digits,'significant');
+cell_thick=round(cell_volume*3/4/pi/cell_length*2/cell_height*2*2,GLB_digits,'significant');
 model.param.set('cell_length',[num2str(cell_length,GLB_digits),'[um]']);
 model.param.set('cell_height',[num2str(cell_height,GLB_digits),'[um]']);
 model.param.set('cell_thick',[num2str(cell_thick,GLB_digits),'[um]']);

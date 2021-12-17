@@ -35,46 +35,32 @@ import com.comsol.model.util.*
 model = ModelUtil.create('Model_3Dleaf2');
 
 %BSE_width=20e-6;
-model.param.set('BSE_width', [num2str(BSE_width),'[m]']);
+model.param.set('BSE_width', [num2str(BSE_width,GLB_digits),'[m]']);
 %EPL_thick=10e-6;
-model.param.set('EPL_thick', [num2str(EPL_thick),'[m]'], 'thickness of lower epidermis');
+model.param.set('EPL_thick', [num2str(EPL_thick,GLB_digits),'[m]'], 'thickness of lower epidermis');
 %MST_thickatvein=65e-6;
-model.param.set('MST_thickatvein', [num2str(MST_thickatvein),'[m]'], 'mesophyll thickness at vein');
+model.param.set('MST_thickatvein', [num2str(MST_thickatvein,GLB_digits),'[m]'], 'mesophyll thickness at vein');
 %EPU_width=20e-6;
-model.param.set('EPU_width', [num2str(EPU_width),'[m]']);
+model.param.set('EPU_width', [num2str(EPU_width,GLB_digits),'[m]']);
 %BUT_width=120e-6;
-model.param.set('BUT_width', [num2str(BUT_width),'[m]']);
-model.param.set('MST_thickatBU', [num2str(MST_thickatBU),'[m]']);
-model.param.set('VEIN_r', [num2str(VEIN_r),'[m]']);
-model.param.set('BS_thick', [num2str(BS_thick),'[m]']);
-model.param.set('VEIN_l', [num2str(VEIN_l),'[m]']);
-model.param.set('EPU_thick', [num2str(EPU_thick),'[m]']);
-model.param.set('BU_thick', [num2str(BU_thick),'[m]']);
-model.param.set('MS_dthick', [num2str(MS_dthick),'[m]']);
-model.param.set('BS_dthick', [num2str(BS_dthick),'[m]']);
-model.param.set('BS_chlo_thick', [num2str(BS_chlo_thick),'[m]']);
+model.param.set('BUT_width', [num2str(BUT_width,GLB_digits),'[m]']);
+model.param.set('MST_thickatBU', [num2str(MST_thickatBU,GLB_digits),'[m]']);
+model.param.set('VEIN_r', [num2str(VEIN_r,GLB_digits),'[m]']);
+model.param.set('BS_thick', [num2str(BS_thick,GLB_digits),'[m]']);
+model.param.set('VEIN_l', [num2str(VEIN_l,GLB_digits),'[m]']);
+model.param.set('EPU_thick', [num2str(EPU_thick,GLB_digits),'[m]']);
+model.param.set('BU_thick', [num2str(BU_thick,GLB_digits),'[m]']);
+model.param.set('MS_dthick', [num2str(MS_dthick,GLB_digits),'[m]']);
+model.param.set('BS_dthick', [num2str(BS_dthick,GLB_digits),'[m]']);
+model.param.set('BS_chlo_thick', [num2str(BS_chlo_thick,GLB_digits),'[m]']);
 %LEAF_z=cell_thick/2*1.1*1e-6;
 LEAF_z=leaf_z0;
-model.param.set('LEAF_z', [num2str(LEAF_z),'[m]']);
+model.param.set('LEAF_z', [num2str(LEAF_z,GLB_digits),'[m]']);
 BS_chlo_z=cell_thick/2*0.9*1e-6;
-model.param.set('BS_chlo_z', [num2str(BS_chlo_z),'[m]']);
-model.param.set('BS_mito_l', [num2str(BS_mito_l),'[m]']);
-model.param.set('BS_mito_r', [num2str(BS_mito_r),'[m]']);
-%     model.param.set('dw', '0.95');
-%     model.param.set('dse', '0.8');
-%     model.param.set('dva', '0.5');
-%     Nlobe=8;% number of lobes; optional 4+2n (n>=0)
-%     model.param.set('Nlobe',num2str(Nlobe));
-%     MSC_length=14.7e-6;
-%     model.param.set('MSC_length','14.7e-6[m]');
-%     MSC_height=10.6e-6;
-%     model.param.set('MSC_height','10.6e-6[m]');
-%     MSC_z=8e-6;
-%     model.param.set('MSC_z','8e-6[m]');
-%     model.param.set('scale_x', 'MSC_length/(Nlobe/2)');
-%     model.param.set('scale_y', 'MSC_height/(5/sqrt(3))');
-%     model.param.set('scale_z', 'MSC_z/1.4');
-%     model.param.set('mit_l', '0.7');
+model.param.set('BS_chlo_z', [num2str(BS_chlo_z,GLB_digits),'[m]']);
+model.param.set('BS_mito_l', [num2str(BS_mito_l,GLB_digits),'[m]']);
+model.param.set('BS_mito_r', [num2str(BS_mito_r,GLB_digits),'[m]']);
+
 model.modelNode.create('mod1');
 
 model.geom.create('geom1', 3);
@@ -293,10 +279,10 @@ model.param.set('Nlobe',num2str(Nlobe));
 Tlobe=Nlobe/2;% type of lobe
 model.param.set('Tlobe',num2str(Tlobe));
 %dw=0.05;
-model.param.set('dw', num2str(dw));
+model.param.set('dw', num2str(dw,GLB_digits));
 %dse=0.5;
-model.param.set('dse', num2str(dse));
-model.param.set('dvaz', num2str(dvaz));
+model.param.set('dse', num2str(dse,GLB_digits));
+model.param.set('dvaz', num2str(dvaz,GLB_digits));
 %cell_length=14.7;%unit um
 %cell_height=10.6;%unit um
 MSC_length=cell_length*1e-6;
@@ -304,24 +290,24 @@ MSC_height=cell_height*1e-6;
 %cell_volume=1783;%unit um^3
 %calculate cell_thick in z %axis
 %cell_thick=round(cell_volume*3/4/pi/cell_length*2/cell_height*2*2,3,'significant');
-model.param.set('cell_length',[num2str(cell_length),'[um]']);
-model.param.set('cell_height',[num2str(cell_height),'[um]']);
-model.param.set('cell_thick',[num2str(cell_thick),'[um]']);
+model.param.set('cell_length',[num2str(cell_length,GLB_digits),'[um]']);
+model.param.set('cell_height',[num2str(cell_height,GLB_digits),'[um]']);
+model.param.set('cell_thick',[num2str(cell_thick,GLB_digits),'[um]']);
 %mit_r=0.07;
 %mit_l=0.05;
-model.param.set('mit_r',num2str(mit_r));
-model.param.set('mit_l',num2str(mit_l));
-model.param.set('vac_lx',num2str(vac_lx));
-model.param.set('vac_ly',num2str(vac_ly));
-model.param.set('lmbd',num2str(lmbd));
-model.param.set('rho',num2str(rho));
+model.param.set('mit_r',num2str(mit_r,GLB_digits));
+model.param.set('mit_l',num2str(mit_l,GLB_digits));
+model.param.set('vac_lx',num2str(vac_lx,GLB_digits));
+model.param.set('vac_ly',num2str(vac_ly,GLB_digits));
+model.param.set('lmbd',num2str(lmbd,GLB_digits));
+model.param.set('rho',num2str(rho,GLB_digits));
 %epsln=0.2;
 if Nlobe==4
     model.param.set('epsln','0');
 else
-    model.param.set('epsln',num2str(epsln));
+    model.param.set('epsln',num2str(epsln,GLB_digits));
 end
-model.param.set('epsln4',num2str(epsln4));%special epsln for cell with 4 lobes
+model.param.set('epsln4',num2str(epsln4,GLB_digits));%special epsln for cell with 4 lobes
 model.param.set('scale_x','(cell_length/2)/(1/2*Tlobe)');
 model.param.set('scale_y','(cell_height/2)/(1/(2*sqrt(3))*(Tlobe+1))');
 tmp_Npts=14+4*(Tlobe-2)+2*Nlobe;
@@ -378,9 +364,11 @@ for loop_lobe=0:Tlobe-2
     rab=1;
     ea=rab*sqrt((tmp_Tlobe/2)^2/rab^2+25/4/3);
     eb=sqrt((tmp_Tlobe/2)^2/rab^2+25/4/3);
+    ea=str2num(num2str(ea,GLB_digits));
+    eb=str2num(num2str(eb,GLB_digits));
     tmptag_elp=['elp',num2str(count_elp)];count_elp=count_elp+1;
     model.geom('geom1').feature.create(tmptag_elp, 'Ellipsoid');
-    eval(['model.geom(''geom1'').feature(tmptag_elp).set(''semiaxes'', {''scale_x*',num2str(ea),''' ''scale_y*',num2str(eb),''' ''cell_thick/2''});'])
+    eval(['model.geom(''geom1'').feature(tmptag_elp).set(''semiaxes'', {''scale_x*',num2str(ea,GLB_digits),''' ''scale_y*',num2str(eb,GLB_digits),''' ''cell_thick/2''});'])
     tmptag_int=['int',num2str(count_int)];count_int=count_int+1;
     tag_sca2=tmptag_int;
     model.geom('geom1').feature.create(tmptag_int, 'Intersection');
@@ -389,7 +377,7 @@ for loop_lobe=0:Tlobe-2
     model.geom('geom1').feature(tmptag_int).selection('input').set([cellstr(tmptag_elp),cellstr([tmptag_ext,'(1)'])]);
     tmptag_elp=['elp',num2str(count_elp)];count_elp=count_elp+1;
     model.geom('geom1').feature.create(tmptag_elp, 'Ellipsoid');
-    eval(['model.geom(''geom1'').feature(tmptag_elp).set(''semiaxes'', {''scale_x*(',num2str(ea),'-dw)'' ''scale_y*(',num2str(eb),'-dw)'' ''cell_thick/2-dw*(scale_x+scale_y)/2''});'])
+    eval(['model.geom(''geom1'').feature(tmptag_elp).set(''semiaxes'', {''scale_x*(',num2str(ea,GLB_digits),'-dw)'' ''scale_y*(',num2str(eb,GLB_digits),'-dw)'' ''cell_thick/2-dw*(scale_x+scale_y)/2''});'])
     tmptag_int=['int',num2str(count_int)];count_int=count_int+1;
     tag_sca3=tmptag_int;
     model.geom('geom1').feature.create(tmptag_int, 'Intersection');
@@ -399,9 +387,9 @@ for loop_lobe=0:Tlobe-2
     tmptag_elp=['elp',num2str(count_elp)];count_elp=count_elp+1;
     model.geom('geom1').feature.create(tmptag_elp, 'Ellipsoid');
     if tmp_Nlobe==4%% chl_i
-        eval(['model.geom(''geom1'').feature(tmptag_elp).set(''semiaxes'', {''scale_x*(',num2str(ea),'-dse*(1-dw+epsln4/2))'' ''scale_y*(',num2str(eb),'-dse*(1-dw+epsln4/2))'' ''cell_thick/2-dse*(1-dw+epsln4/2)*(scale_x+scale_y)/2''});'])
+        eval(['model.geom(''geom1'').feature(tmptag_elp).set(''semiaxes'', {''scale_x*(',num2str(ea,GLB_digits),'-dse*(1-dw+epsln4/2))'' ''scale_y*(',num2str(eb,GLB_digits),'-dse*(1-dw+epsln4/2))'' ''cell_thick/2-dse*(1-dw+epsln4/2)*(scale_x+scale_y)/2''});'])
     else
-        eval(['model.geom(''geom1'').feature(tmptag_elp).set(''semiaxes'', {''scale_x*(',num2str(ea),'-dse*(1-dw+epsln/2))'' ''scale_y*(',num2str(eb),'-dse*(1-dw+epsln/2))'' ''cell_thick/2-dse*(1-dw+epsln/2)*(scale_x+scale_y)/2''});'])
+        eval(['model.geom(''geom1'').feature(tmptag_elp).set(''semiaxes'', {''scale_x*(',num2str(ea,GLB_digits),'-dse*(1-dw+epsln/2))'' ''scale_y*(',num2str(eb,GLB_digits),'-dse*(1-dw+epsln/2))'' ''cell_thick/2-dse*(1-dw+epsln/2)*(scale_x+scale_y)/2''});'])
     end
     tmptag_int=['int',num2str(count_int)];count_int=count_int+1;
     tag_sca4=tmptag_int;
@@ -500,7 +488,7 @@ count_copy=1;
 % count_dif=3;
 count_del=2;
 %count_uni=2;
-count_MSC=0;
+count_MSC=1;
 load tmp_IAS2D.mat ms_distribution
 % load 0000.mat ms_distribution
 for loop_i=1:N_ms_rows
@@ -647,7 +635,7 @@ for loop_i=1:N_ms_rows
                                     end
                                 end
                                 %##operation int mito error
-                                size(tmptag_mitall)
+                                size(tmptag_mitall);
                                 if size(tmptag_mitall,1)==0
                                     %                                 model.geom('geom1').feature(tmptag_vac0).active(false);
                                     %                                 model.geom('geom1').feature(tmptag_vac1).active(false);
@@ -812,8 +800,6 @@ for loop_i=1:N_ms_rows
                                                     prep_CreSel(count_list_cresel,1)=count_list_cresel;
                                                     prep_CreSel(count_list_cresel,2)=1;
                                                     %%%change selection name
-                                                    %count_MSC
-                                                    count_MSC=count_MSC+1;
                                                     tmp_str=['ms',num2str(count_MSC),'_vac'];
                                                     model.geom('geom1').feature(tmptag_vac1).name(tmp_str);
                                                     tmp_str=['ms',num2str(count_MSC),'_chl'];
@@ -823,6 +809,8 @@ for loop_i=1:N_ms_rows
                                                     tmp_str=['ms',num2str(count_MSC),'_cyt'];
                                                     model.geom('geom1').feature(tmptag_mscyt).name(tmp_str);
                                                     tmptag_IASinput2(count_MSC)=cellstr(tmptag_msw0);
+                                                    count_MSC;
+                                                    count_MSC=count_MSC+1;
                                                     %%%delete
                                                     tmptag_del=['del',num2str(count_del)];
                                                     model.geom('geom1').feature.create(tmptag_del, 'Delete');

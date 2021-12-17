@@ -16,12 +16,12 @@ for loop_std=[1,2]%1:4
     %% study1~4
     %load study1
     tmp_study=load(['study',num2str(loop_std),'_',suffix]);
-    tmp_std1{1}=num2str(tmp_study(1,:));
-    tmp_std1{2}=num2str(tmp_study(2,:));
+    tmp_std1{1}=num2str(tmp_study(1,:),GLB_digits);
+    tmp_std1{2}=num2str(tmp_study(2,:),GLB_digits);
     if loop_std==1||loop_std==2 %% study1 and study3 are normal O2
-        tmp_std1{3}=num2str(ones(size(tmp_study(1,:)))*21000);
+        tmp_std1{3}=num2str(ones(size(tmp_study(1,:)))*21000,GLB_digits);
     else
-        tmp_std1{3}=num2str(ones(size(tmp_study(1,:)))*2100);
+        tmp_std1{3}=num2str(ones(size(tmp_study(1,:)))*2100,GLB_digits);
     end
     tmpstr_std=['std',num2str(loop_std)];
     model.study.create(tmpstr_std);
