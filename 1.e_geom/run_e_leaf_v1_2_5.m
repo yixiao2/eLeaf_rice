@@ -204,7 +204,7 @@ tmp_bash_cmd=['./trace_recal ',num2str(SAC_licor_blue475nm(1)),' ',num2str(SAC_l
     'results_merged_absrf_475nm_500x_rep',num2str(rep_num),' ',...
     'results_merged_abprofile_475nm_500x_rep',num2str(rep_num),'_layerN',num2str(num_layer4lightprofile),' ',...
     'results_merged_rtsum_475nm_500x_rep',num2str(rep_num)];
-system(tmp_bash_cmd)
+system(tmp_bash_cmd);
 %% SAC_licor_red625nm=[2.834e-3*100, 2.34e4*1e-4];
 RT_x_range=500;
 RT_y_range=25;
@@ -222,7 +222,7 @@ tmp_bash_cmd=['./trace_recal ',num2str(SAC_licor_red625nm(1)),' ',num2str(SAC_li
     'results_merged_absrf_625nm_500x_rep',num2str(rep_num),' ',...
     'results_merged_abprofile_625nm_500x_rep',num2str(rep_num),'_layerN',num2str(num_layer4lightprofile),' ',...
     'results_merged_rtsum_625nm_500x_rep',num2str(rep_num)];
-system(tmp_bash_cmd)
+system(tmp_bash_cmd);
 
 %% tar intermediate files from ray tracing
 system('tar -zcf results_files_abevents.tar.gz results_abevents_* --remove-files');% tar -zxvf ***.tar.gz; -v = output log
