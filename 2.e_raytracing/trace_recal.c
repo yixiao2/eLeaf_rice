@@ -536,7 +536,7 @@ int main(int argc, char **argv)
 
 		if((fp=fopen(tmp_filename_absum,"r"))==NULL)
 		{
-			printf("Sum File does not exist: %s\n",tmp_filename_absum);
+			// printf("Sum File does not exist: %s\n",tmp_filename_absum);
 			count_fail=count_fail+1;
 		}
 		else
