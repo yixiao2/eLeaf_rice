@@ -41,7 +41,7 @@ tmp_paths_all=load('../test_plot4RT');%%need to change Defs.h to get this file
 tmp_idx=find(tmp_paths_all(:,1)==80&tmp_paths_all(:,2)==10);
 plot3(tmp_paths_all(tmp_idx,3),tmp_paths_all(tmp_idx,4),tmp_paths_all(tmp_idx,5),'r-o','linewidth',1);hold on;
 axis equal
-view(90,0)
+view(10,85)
 
 % P=[3.53688e-005,1.62161e-005,0];
 % D=[0.67129415129712866, -0.52763743027764065, -0.52054097303120694];
