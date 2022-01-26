@@ -184,6 +184,9 @@ if numel(failed_threads{rep_num})/(num_loop_x*num_loop_y)>0.05
     %%error('High fail rate during ray tracing.')
     disp('[Warning]: High fail rate during ray tracing.')
 end
+%%%%%to do%%%%%%
+% loop the failed threads for max 2 or 3 times?
+%%%%%%%%%%%%%%%%
 
 %% trace_recal --> ab profiles under 475nm and 625nm
 num_layer4lightprofile=10;
