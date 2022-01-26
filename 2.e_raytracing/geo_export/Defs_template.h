@@ -123,7 +123,7 @@ double SAC_air;
 #define vacu_refr_index 1.333
 
 #define DBL_EPSILON (2.2204460492503131e-16)
-#define DIS_EPSILON (1.0e-11)//in eLeaf, model_ddis=0.1e-6, DIS_EPSILON=1e-4*model_ddis
+#define DIS_EPSILON (5.0e-11)//in eLeaf, model_ddis=0.1e-6, DIS_EPSILON=1e-4*model_ddis. Also modify based on error [trace()-05]
 
 int num_chl_hit;
 double debugI;
