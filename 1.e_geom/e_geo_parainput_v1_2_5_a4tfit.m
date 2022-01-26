@@ -158,18 +158,18 @@ else
 end
 
 if select_com(9)==0
-    Resp=2.37;
-    yiill=0.62;
-    s_yin=0.62;
-    Jm=359.67;
+    Resp=2.92;
+    yiill=0.63;
+    s_yin=0.63;
+    Jm=224.63;
     theta=0.98;%constant
-    Vcmax=173.58;
+    Vcmax=114.39;
     Sco=3375;%constant
     Kc=239;
     Ko=266000;%Km=239*(1+210000/266000)=428
     
-    fc_CA=2.6;%fold change of CA
-    fc_wall_perm=8.41;%fold change of wall permeability
+    fc_CA=1.26;%fold change of CA
+    fc_wall_perm=2.27;%fold change of wall permeability
     
     %bst_ft_vm=1.4;
     %bst_ft_jm=1.2;
@@ -183,19 +183,19 @@ if select_com(9)==0
     %yiill=yiill*bst_ft_yii;
 else
     %% replace 8.enzyme
-    Resp=2.1;
-    yiill=0.59;
+    Resp=3.34;
+    yiill=0.61;
     s_yin=0.48;
-    Jm=386.28;
+    Jm=268.79;
     theta=0.98;%constant
-    Vcmax=178.94;
+    Vcmax=121.98;
     Sco=3375;%constant
     Kc=239;
     Ko=266000;%Km=239*(1+210000/266000)=428
     %% end replace 8
     
-    fc_CA=2.6;%fold change of CA
-    fc_wall_perm=8.41;%fold change of wall permeability
+    fc_CA=1.26;%fold change of CA
+    fc_wall_perm=2.27;%fold change of wall permeability
     
     %bst_ft_vm=3.3;
     %bst_ft_jm=1.7;
