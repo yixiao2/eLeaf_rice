@@ -925,6 +925,7 @@ void trace(Ray *ray, Object *obj)
 					if(flag_errormsg==1)
 					{
 						printf("[ErrorMsg] trace()-05: Ray is inside. detect intersect_mth is closer than intersect\n");
+						printf("intersect_mth->t-intersect->t=%e\n",intersect_mth->t-intersect->t);
 					}
 					exit(1);
 				}
