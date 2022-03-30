@@ -52,7 +52,7 @@ else
             end
             eval([tmp_chr,'=',tmp_chr,'*',num2str(CFG_SA_FC(tmp_loop)),';'])
         end
-        recal_parainput;
+        recal_parainput;%essential recalculation, indirect par to direct par
         save parainput.mat
     end
 end
