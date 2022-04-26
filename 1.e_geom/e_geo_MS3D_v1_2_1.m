@@ -20,7 +20,7 @@ Tlobe=Nlobe/2;% type of lobe
 model.param.set('Tlobe',num2str(Tlobe));
 %dw=0.05;
 model.param.set('dw', num2str(dw));
-dse=0.5;
+dse=0.1;%previously 0.5, cause issue when Nlobe=4
 model.param.set('dse', num2str(dse));
 model.param.set('dvaz', '0.05');
 %cell_length=14.7;%unit um
@@ -39,7 +39,9 @@ model.param.set('lmbd',num2str(lmbd));
 model.param.set('rho',num2str(rho));
 %epsln=0.2;
 if Nlobe==4
+    model.param.set('epsln4','0');
     model.param.set('epsln','0');
+    epsln=0;
 else
     model.param.set('epsln',num2str(epsln));
 end
@@ -49,8 +51,9 @@ model.modelNode.create('mod1');
 %% geometry
 model.param.set('scale_x','(cell_length/2)/(1/2*Tlobe)');
 scale_x=(cell_length/2)/(1/2*Tlobe);
-model.param.set('scale_y','(cell_height/2)/(1/(2*sqrt(3))*(Tlobe+1))');
-scale_y=(cell_height/2)/(1/(2*sqrt(3))*(Tlobe+1));
+%model.param.set('scale_y','(cell_height/2)/(1/(2*sqrt(3))*(Tlobe+1))');
+model.param.set('scale_y','(cell_height/2)/(1/(2*sqrt(3))*(4+1))');
+scale_y=(cell_height/2)/(1/(2*sqrt(3))*(4+1));
 tmp_Npts=14+4*(Tlobe-2)+2*Nlobe;
 [tmp_wallString,tmp_chloString,tmp_chliString,tmp_IDXxse,tmp_IDXyse]=msoutline_v1_2(Nlobe,dw,dse,epsln);
 
@@ -230,6 +233,7 @@ cell_thick/2*1e-6;
 1/sqrt(3)*rho*(scale_x+scale_y)/2;
 
 save tmp_MS3D.mat -regexp '^(?!(model|ans)$).'
+mphsave(model,'tmpCK_MS3D.mph');
 display('MS3D matched.')
 
 %toc
