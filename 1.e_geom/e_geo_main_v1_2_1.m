@@ -272,7 +272,8 @@ else
 end
 model.param.set('epsln4',num2str(epsln4,GLB_digits));%special epsln for cell with 4 lobes
 model.param.set('scale_x','(cell_length/2)/(1/2*Tlobe)');
-model.param.set('scale_y','(cell_height/2)/(1/(2*sqrt(3))*(Tlobe+1))');
+%model.param.set('scale_y','(cell_height/2)/(1/(2*sqrt(3))*(Tlobe+1))');
+model.param.set('scale_y','(cell_height/2)/(1/(2*sqrt(3))*(4+1))');
 tmp_Npts=14+4*(Tlobe-2)+2*Nlobe;
 
 %% generate basic mesophyll cell with different lobes
