@@ -309,7 +309,8 @@ else
 end
 model.param.set('epsln4',num2str(epsln4,GLB_digits));%special epsln for cell with 4 lobes
 model.param.set('scale_x','(cell_length/2)/(1/2*Tlobe)');
-model.param.set('scale_y','(cell_height/2)/(1/(2*sqrt(3))*(Tlobe+1))');
+%model.param.set('scale_y','(cell_height/2)/(1/(2*sqrt(3))*(Tlobe+1))');
+model.param.set('scale_y','(cell_height/2)/(1/(2*sqrt(3))*(4+1))');
 tmp_Npts=14+4*(Tlobe-2)+2*Nlobe;
 
 %% generate basic mesophyll cell with different lobes
@@ -468,7 +469,8 @@ for loop_lobe=0:Tlobe-2
 end
 
 %% columns and rows
-N_ms_cols=floor((EPU_width+BUT_width/2)/MSC_length)+2;
+%N_ms_cols=floor((EPU_width+BUT_width/2)/MSC_length)+2;
+N_ms_cols=floor((EPU_width+BUT_width/2)/(MSC_length*(Tlobe-1)/Tlobe))+2;%distance between two MSCs, corrected by Tlobe.
 N_ms_rows=floor(MST_thickatvein/MSC_height)+2;
 
 model.param.set('col_dx', '(Nlobe/2-1/2)*scale_x');

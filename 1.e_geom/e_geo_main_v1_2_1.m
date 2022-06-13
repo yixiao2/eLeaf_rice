@@ -431,7 +431,8 @@ for loop_lobe=0:Tlobe-2
 end
 
 %% columns and rows
-N_ms_cols=floor((EPU_width+BUT_width/2)/MSC_length)+2;
+%N_ms_cols=floor((EPU_width+BUT_width/2)/MSC_length)+2;
+N_ms_cols=floor((EPU_width+BUT_width/2)/(MSC_length*(Tlobe-1)/Tlobe))+2;%distance between two MSCs, corrected by Tlobe.
 N_ms_rows=floor(MST_thickatvein/MSC_height)+2;
 
 model.param.set('col_dx', '(Nlobe/2-1/2)*scale_x');

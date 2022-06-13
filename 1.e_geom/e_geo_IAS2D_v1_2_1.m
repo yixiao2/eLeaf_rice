@@ -105,7 +105,8 @@ else
     model.param.set('epsln',num2str(epsln));
 end
 model.param.set('scale_x','(cell_length/2)/(1/2*Tlobe)');
-model.param.set('scale_y','(cell_height/2)/(1/(2*sqrt(3))*(Tlobe+1))');
+%model.param.set('scale_y','(cell_height/2)/(1/(2*sqrt(3))*(Tlobe+1))');
+model.param.set('scale_y','(cell_height/2)/(1/(2*sqrt(3))*(4+1))');
 tmp_Npts=14+4*(Tlobe-2)+2*Nlobe;
 % dw=0.05;dse=0.5;
 [tmp_wallString,tmp_chloString,tmp_chliString,tmp_IDXxse,tmp_IDXyse]=msoutline_v1_2(Nlobe,dw,dse,epsln);
@@ -120,7 +121,8 @@ eval(['model.geom(''geom1'').feature(''wp1'').geom.feature(tmptag_wppol).set(''t
 
 %% distribute ms cell
 MSC_length=cell_length*1e-6;MSC_height=cell_height*1e-6;
-N_ms_cols=floor((EPU_width+BUT_width/2)/MSC_length)+2;
+%N_ms_cols=floor((EPU_width+BUT_width/2)/MSC_length)+2;
+N_ms_cols=floor((EPU_width+BUT_width/2)/(MSC_length*(Tlobe-1)/Tlobe))+2;%distance between two MSCs, corrected by Tlobe.
 N_ms_rows=floor(MST_thickatvein/MSC_height)+2;
 
 % random the initial point

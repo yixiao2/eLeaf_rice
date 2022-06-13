@@ -39,6 +39,8 @@ CFG_SA_FC=r.CFG_SA_FC;
 
 save CFG.mat CFG*
 
+rng shuffle
+
 if CFG_MODE==1
     e_geo_parainput_v1_2_5_b4fit(CFG_PARA_COM);
 else
@@ -181,8 +183,8 @@ end
 failed_threads{rep_num}=find(record_success==0);
 
 if numel(failed_threads{rep_num})/(num_loop_x*num_loop_y)>0.05
-    %%error('High fail rate during ray tracing.')
-    disp('[Warning]: High fail rate during ray tracing.')
+    error('High fail rate during ray tracing.')
+    %%disp('[Warning]: High fail rate during ray tracing.')
 end
 %%%%%to do%%%%%%
 % loop the failed threads for max 2 or 3 times?
