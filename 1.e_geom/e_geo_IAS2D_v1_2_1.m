@@ -1,7 +1,7 @@
 % eLeaf: 3D model of rice leaf photosynthesis
 % @license: LGPL (GNU LESSER GENERAL PUBLIC LICENSE Version 3)
 % @author: Yi Xiao <yixiao20@outlook.com>
-% @version: 1.2.5
+% @version: 1.2.6
 
 clear all;%tic
 import com.comsol.model.*
@@ -15,21 +15,21 @@ load parainput.mat
 % cell_height=10.6*3;
 %%%%%%%%%%%%%%%
 
-model.param.set('BSE_width', [num2str(BSE_width),'[m]']);
-model.param.set('EPL_thick', [num2str(EPL_thick),'[m]'], 'thickness of lower epidermis');
-model.param.set('MST_thickatvein', [num2str(MST_thickatvein),'[m]'], 'mesophyll thickness at vein');
-model.param.set('EPU_width', [num2str(EPU_width),'[m]']);
-model.param.set('BUT_width', [num2str(BUT_width),'[m]']);
-model.param.set('MST_thickatBU', [num2str(MST_thickatBU),'[m]']);
-model.param.set('VEIN_r', [num2str(VEIN_r),'[m]']);
-model.param.set('BS_thick', [num2str(BS_thick),'[m]']);
-model.param.set('VEIN_l', [num2str(VEIN_l),'[m]']);
-model.param.set('EPU_thick', [num2str(EPU_thick),'[m]']);
-model.param.set('BU_thick', [num2str(BU_thick),'[m]']);
-model.param.set('MS_dthick', [num2str(MS_dthick),'[m]']);
-model.param.set('BS_dthick', [num2str(BS_dthick),'[m]']);
-model.param.set('BS_mito_l', [num2str(BS_mito_l),'[m]']);
-model.param.set('BS_mito_r', [num2str(BS_mito_r),'[m]']);
+model.param.set('BSE_width', [num2str(BSE_width,GLB_digits),'[m]']);
+model.param.set('EPL_thick', [num2str(EPL_thick,GLB_digits),'[m]'], 'thickness of lower epidermis');
+model.param.set('MST_thickatvein', [num2str(MST_thickatvein,GLB_digits),'[m]'], 'mesophyll thickness at vein');
+model.param.set('EPU_width', [num2str(EPU_width,GLB_digits),'[m]']);
+model.param.set('BUT_width', [num2str(BUT_width,GLB_digits),'[m]']);
+model.param.set('MST_thickatBU', [num2str(MST_thickatBU,GLB_digits),'[m]']);
+model.param.set('VEIN_r', [num2str(VEIN_r,GLB_digits),'[m]']);
+model.param.set('BS_thick', [num2str(BS_thick,GLB_digits),'[m]']);
+model.param.set('VEIN_l', [num2str(VEIN_l,GLB_digits),'[m]']);
+model.param.set('EPU_thick', [num2str(EPU_thick,GLB_digits),'[m]']);
+model.param.set('BU_thick', [num2str(BU_thick,GLB_digits),'[m]']);
+model.param.set('MS_dthick', [num2str(MS_dthick,GLB_digits),'[m]']);
+model.param.set('BS_dthick', [num2str(BS_dthick,GLB_digits),'[m]']);
+model.param.set('BS_mito_l', [num2str(BS_mito_l,GLB_digits),'[m]']);
+model.param.set('BS_mito_r', [num2str(BS_mito_r,GLB_digits),'[m]']);
 model.modelNode.create('mod1');
 
 model.geom.create('geom1', 3);
@@ -88,10 +88,10 @@ model.param.set('dvaz', num2str(dvaz));
 %cell_height=10.6;%unit um
 %cell_volume=1783;%unit um^3
 %calculate cell_thick in z axis
-cell_thick=round(cell_volume*3/4/pi/cell_length*2/cell_height*2*2,3,'significant');
-model.param.set('cell_length',[num2str(cell_length),'[um]']);
-model.param.set('cell_height',[num2str(cell_height),'[um]']);
-model.param.set('cell_thick',[num2str(cell_thick),'[um]']);
+cell_thick=round(cell_volume*3/4/pi/cell_length*2/cell_height*2*2,GLB_digits,'significant');
+model.param.set('cell_length',[num2str(cell_length,GLB_digits),'[um]']);
+model.param.set('cell_height',[num2str(cell_height,GLB_digits),'[um]']);
+model.param.set('cell_thick',[num2str(cell_thick,GLB_digits),'[um]']);
 %mit_r=0.07;
 %mit_l=0.05;
 model.param.set('mit_r',num2str(mit_r));
@@ -105,7 +105,8 @@ else
     model.param.set('epsln',num2str(epsln));
 end
 model.param.set('scale_x','(cell_length/2)/(1/2*Tlobe)');
-model.param.set('scale_y','(cell_height/2)/(1/(2*sqrt(3))*(Tlobe+1))');
+%model.param.set('scale_y','(cell_height/2)/(1/(2*sqrt(3))*(Tlobe+1))');
+model.param.set('scale_y','(cell_height/2)/(1/(2*sqrt(3))*(4+1))');
 tmp_Npts=14+4*(Tlobe-2)+2*Nlobe;
 % dw=0.05;dse=0.5;
 [tmp_wallString,tmp_chloString,tmp_chliString,tmp_IDXxse,tmp_IDXyse]=msoutline_v1_2(Nlobe,dw,dse,epsln);
@@ -120,18 +121,20 @@ eval(['model.geom(''geom1'').feature(''wp1'').geom.feature(tmptag_wppol).set(''t
 
 %% distribute ms cell
 MSC_length=cell_length*1e-6;MSC_height=cell_height*1e-6;
-N_ms_cols=floor((EPU_width+BUT_width/2)/MSC_length)+2;
+%N_ms_cols=floor((EPU_width+BUT_width/2)/MSC_length)+2;
+N_ms_cols=floor((EPU_width+BUT_width/2)/(MSC_length*(Tlobe-1)/Tlobe))+2;%distance between two MSCs, corrected by Tlobe.
 N_ms_rows=floor(MST_thickatvein/MSC_height)+2;
 
-    % random the initial point
-    Origin_x=BSE_width/2-MSC_length/2*rand;
-    Origin_y=EPL_thick-MSC_height/2*rand;
-    %delete('save_tmp0.mat')
+% random the initial point
+Origin_x=BSE_width/2-MSC_length/2*rand;
+Origin_y=EPL_thick-MSC_height/2*rand;
+Origin_x=str2num(num2str(Origin_x,GLB_digits));
+Origin_y=str2num(num2str(Origin_y,GLB_digits));
 
 model.geom('geom1').feature('wp1').geom.create('mov1', 'Move');
 model.geom('geom1').feature('wp1').geom.feature('mov1').selection('input').set(tmptag_wppol);
-model.geom('geom1').feature('wp1').geom.feature('mov1').set('displx', num2str(Origin_x));
-model.geom('geom1').feature('wp1').geom.feature('mov1').set('disply', num2str(Origin_y));
+model.geom('geom1').feature('wp1').geom.feature('mov1').set('displx', num2str(Origin_x,GLB_digits));
+model.geom('geom1').feature('wp1').geom.feature('mov1').set('disply', num2str(Origin_y,GLB_digits));
 model.geom('geom1').feature('wp1').geom.run('mov1');
 model.geom('geom1').feature('wp1').geom.run('mov1');
 
@@ -212,7 +215,7 @@ IAS_2D_min_2= (sa_msregion-sum_sa_ms)/sa_leaf;%IAS per leaf cross-section
     tmp_page2=tmp_page;
     tmp_page(Nhole_IDX)=0;
     tmp_page2(Nhole_IDX)=0;
-%     display(['Error: Exact IAD_2D_input cannot be reached since it is too small. The modeled IAS_2D is ',num2str(round(IAS_2D_min_1,3,'significant')),' .']);    
+%     display(['Error: Exact IAD_2D_input cannot be reached since it is too small. The modeled IAS_2D is ',num2str(round(IAS_2D_min_1,GLB_digits,'significant')),' .']);    
     lmbd=0.25;rho=0;
 
 ms_distribution(:,:,2)=tmp_page;

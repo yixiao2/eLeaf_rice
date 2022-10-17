@@ -14,39 +14,84 @@
 #include <math.h>
 #include "Defs.h"
 
+int unique_dis(double *all_dis, int vec_size)
+{
+	// input: a double array
+	// output: number of unique dis values
+	int i,j,count_unique=0;
+	int *flag;
+	flag=calloc(vec_size, sizeof(int));//record non-unique element
+	for(i=0;i<vec_size;i++)
+	{
+		*(flag+i)=0;//initialize
+	}
+	if(vec_size==1)
+	{
+		count_unique=1;
+	}
+	else
+	{
+		for(i=0;i<vec_size-1;i++)
+		{
+			if(*(flag+i)==0)//skip detected non-unique element
+			{
+				count_unique=count_unique+1;
+				for(j=i+1;j<vec_size;j++)
+				{
+					if(*(flag+j)==0)//skip detected non-unique element
+					{
+						if(fabs(*(all_dis+i)-*(all_dis+j))<DBL_EPSILON)
+						{
+							*(flag+i)=1;
+							*(flag+j)=1;
+						}
+					}
+				}
+			}
+		}
+	}
+	free(flag);
+	return count_unique;
+}
+
 void sum_p()
 {
 	double sum_I_absorb_all=0.0;
 	int i,j;
+	Object *curobj;
 
 	//ms
-	for(i=1;i<=ms_num;i++)
+	for(i=1;i<=msall_num;i++)
 	{
 		curobj=p_cell_ms[i-1];
-		sum_I_absorb_all+=curobj->I_absorb;
+		sum_I_absorb_all+=curobj->I_absorb_o;
+		sum_I_absorb_all+=curobj->I_absorb_i;
 			
 		for(j=1;j<=ms_chl_num[i-1];j++)
 		{
 			curobj=p_chl_ms[i-1][j-1];
-			sum_I_absorb_all+=curobj->I_absorb;
+			sum_I_absorb_all+=curobj->I_absorb_o;
+			sum_I_absorb_all+=curobj->I_absorb_i;
 		}
 		
 		curobj=p_vac_ms[i-1];
-		sum_I_absorb_all+=curobj->I_absorb;
+		sum_I_absorb_all+=curobj->I_absorb_o;
+		sum_I_absorb_all+=curobj->I_absorb_i;
 	}
 
 	//non_ms
-	for(i=1;i<=num_nonMS;i++)
+	for(i=1;i<=nonms_num;i++)
 	{
 		curobj=p_cell_ns[i-1];
-		sum_I_absorb_all+=curobj->I_absorb;
+		sum_I_absorb_all+=curobj->I_absorb_o;
+		sum_I_absorb_all+=curobj->I_absorb_i;
 	}
 
-	printf("discardI:%e\n",I_discard);
-	printf("discardI_Reflect:%e\n",I_discard_Rf);
-	printf("discardI_Transmit:%e\n",I_discard_Tr);
-	printf("total absorb I:%e\n",sum_I_absorb_all);
-	printf("sum_I:%e\n",sum_I_absorb_all+I_discard+I_discard_Rf+I_discard_Tr);
+	printf("    discardI:%e\n",I_discard);
+	printf("    discardI_Reflect:%e\n",I_discard_Rf);
+	printf("    discardI_Transmit:%e\n",I_discard_Tr);
+	printf("    total absorb I:%e\n",sum_I_absorb_all);
+	printf("    sum_I:%e\n\n",sum_I_absorb_all+I_discard+I_discard_Rf+I_discard_Tr);
 }
 
 void VecSub(Vec v1,Vec v2,Vec v3)

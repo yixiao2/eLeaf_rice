@@ -1,7 +1,7 @@
 % eLeaf: 3D model of rice leaf photosynthesis
 % @license: LGPL (GNU LESSER GENERAL PUBLIC LICENSE Version 3)
 % @author: Yi Xiao <xiaoyi@sippe.ac.cn>
-% @version: 1.2.5
+% @version: 1.2.6
 
 function run_e_leaf_v1_2_5(CFG_MODE,CFG_PARA_COM,varargin)
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -39,6 +39,8 @@ CFG_SA_FC=r.CFG_SA_FC;
 
 save CFG.mat CFG*
 
+rng shuffle
+
 if CFG_MODE==1
     e_geo_parainput_v1_2_5_b4fit(CFG_PARA_COM);
 else
@@ -52,7 +54,7 @@ else
             end
             eval([tmp_chr,'=',tmp_chr,'*',num2str(CFG_SA_FC(tmp_loop)),';'])
         end
-        recal_parainput;
+        recal_parainput;%essential recalculation, indirect par to direct par
         save parainput.mat
     end
 end
@@ -92,22 +94,6 @@ fprintf(fileID,'3 0 1 3\n3 1 2 3\n3 0 3 4\n3 3 4 7\n3 0 1 4\n3 1 4 5\n3 1 2 5\n3
 fclose(fileID);
 copyfile('leaf','../2.e_raytracing');
 
-%generate bash command; 470nm
-fileID=fopen('run_raytracing_470.sh','w');
-fprintf(fileID,'for i in {1..5}\ndo\n  if [ ! -f results_cell_470 ];\n  then\n');
-fprintf(fileID,'./test 0 500 0 25 1.060000e-04 1.113930e+05 %e results_tri_470 results_cell_470 results_sum_470\n',chl_con4raytracing);
-fprintf(fileID,'  else\n    break\n  fi\ndone\n\necho $i\nif [ ! -f results_cell_470 ];\n  then\n  echo failed\nfi\n');
-fclose(fileID);
-copyfile('run_raytracing_470.sh','../2.e_raytracing');
-
-%generate bash command; 665nm
-fileID=fopen('run_raytracing_665.sh','w');
-fprintf(fileID,'for i in {1..5}\ndo\n  if [ ! -f results_cell_665 ];\n  then\n');
-fprintf(fileID,'./test 0 500 0 25 4.290000e-03 5.277384e+04 %e results_tri_675 results_cell_665 results_sum_665\n',chl_con4raytracing);
-fprintf(fileID,'  else\n    break\n  fi\ndone\n\necho $i\nif [ ! -f results_cell_665 ];\n  then\n  echo failed\nfi\n');
-fclose(fileID);
-copyfile('run_raytracing_665.sh','../2.e_raytracing');
-
 %% run geo_export to generate triangle meshed surface
 cd ../2.e_raytracing/geo_export
 geo_export_e_geo_main_v1_2
@@ -116,12 +102,13 @@ copyfile('Defs_template.h','Defs.h');
 fileID=fopen('Defs.h','a');
 load save_e_geom.mat xmax xmin ymax ymin zmax zmin
 fprintf(fileID,'#define xmax %e\n#define xmin %e\n#define zmax %e\n#define zmin %e\n#define ymax %e\n#define ymin %e\n\n',xmax,xmin,zmax,zmin,ymax,ymin);
-fprintf(fileID,'#define ms_num %d\nint count_ms;\n#define ms_max_chl_num %d\nint ms_chl_num[ms_num];\n#define num_nonMS %d\n\n',count_MSC,max(count_mschl),count_nscell);
-fprintf(fileID,'Object *p_cell_ms[ms_num];\nObject *p_chl_ms[ms_num][ms_max_chl_num];\nObject *p_vac_ms[ms_num];\nObject *p_leaf;\nObject *p_cell_ns[num_nonMS];\n\n');
+fprintf(fileID,'#define bsc_num 1\n#define msc_num %d\n#define msall_num (bsc_num+msc_num)\n',count_MSC);
+fprintf(fileID,'int count_ms;\nint count_nonms;\n#define ms_max_chl_num %d\nint ms_chl_num[msall_num];\ndouble ms_chl_con[msall_num];\n#define nonms_num %d\n\n',max(count_mschl),count_nscell);
+fprintf(fileID,'Object *p_cell_ms[msall_num];\nObject *p_chl_ms[msall_num][ms_max_chl_num];\nObject *p_vac_ms[msall_num];\nObject *p_leaf;\nObject *p_cell_ns[nonms_num];\n\n');
 fprintf(fileID,'#endif\n');
 fclose(fileID);
 copyfile('Defs.h','../');
-copyfile('count_chl','../');
+copyfile('count_chl4RT','../');%%file generated from geo_export.m
 
 %copy ms*.ply to ../MS/
 copyfile('ms*.ply','../MS/');
@@ -133,8 +120,120 @@ copyfile('save_raytracing.mat','../../2.5.eleaf_fvcb_fit');
 %% ray tracing
 cd ..
 system('make');
-system('sh run_raytracing_470.sh');
-system('sh run_raytracing_665.sh');
+%system('sh run_raytracing_475.sh');
+%system('sh run_raytracing_625.sh');
+SAC_licor_blue475nm=[1.14e-4*100, 4.26e4*1e-4];
+SAC_licor_red625nm=[2.834e-3*100, 2.34e4*1e-4];
+tmp_SAC_water=min(SAC_licor_blue475nm(1),SAC_licor_red625nm(1));
+tmp_SAC_chl=min(SAC_licor_blue475nm(2),SAC_licor_red625nm(2));
+%%%%%%%%% CASE5: cut x&y every 5 rays; batch number 100*100
+rep_num=1;
+CASE_NUM=5;
+%delete(gcp('nocreate'));
+%parpool(1);% num of cores for ray tracing
+RT_x_range=500;
+RT_y_range=25;
+RT_x_perthread=5;
+RT_y_perthread=1;
+num_loop_x=RT_x_range/RT_x_perthread;
+num_loop_y=RT_y_range/RT_y_perthread;
+count_batch=0;
+batch_cmd_all={};
+for loop_x=1:num_loop_x
+    for loop_y=1:num_loop_y
+        count_batch=count_batch+1;
+        ray_x_start=RT_x_perthread*(loop_x-1);
+        ray_x_end=RT_x_perthread*(loop_x);
+        ray_y_start=RT_y_perthread*(loop_y-1);
+        ray_y_end=RT_y_perthread*(loop_y);
+        %%%% For fitting, run RT using 1/20*chl_SAC, assuming 1/10 is the lower limit of
+        %%%% [chl] and 1/2 is the lower limit of chl_SAC itself.
+        %%%% 1.22e4*1e-4/20=0.0610
+        tmp_bash_cmd=['./test ',num2str(tmp_SAC_water),' ',num2str(tmp_SAC_chl),' ',...
+            'results_abevents_tmpnm_500x_rep',num2str(rep_num),'_',num2str(count_batch),' ',...
+            'count_chl4RT ',...
+            num2str(RT_x_range),' ',num2str(RT_y_range),' ',...
+            num2str(ray_x_start),' ',num2str(ray_x_end),' ',...
+            num2str(ray_y_start),' ',num2str(ray_y_end),' ',...
+            'results_srf_tmpnm_500x_rep',num2str(rep_num),'_',num2str(count_batch),' ',...
+            'results_sum_tmpnm_500x_rep',num2str(rep_num),'_',num2str(count_batch),...
+            ' >>results_RTlog_tmpnm_500x_',num2str(rep_num),'_',num2str(count_batch)];
+        %system(['start ',tmp_batch_cmd])
+        batch_cmd_all={batch_cmd_all{:},tmp_bash_cmd};
+    end
+end
+tic
+%parfor loop_bash=1:size(batch_cmd_all,2)
+for loop_bash=1:size(batch_cmd_all,2)
+    system(batch_cmd_all{loop_bash});
+end
+time_case(rep_num)=toc;
+%%%% check results_sum files
+count_batch=0;
+record_success=zeros(1,num_loop_x*num_loop_y);
+for loop_x=1:num_loop_x
+    for loop_y=1:num_loop_y
+        count_batch=count_batch+1;
+        tmp_file_name=['results_sum_tmpnm_500x_rep',num2str(rep_num),'_',num2str(count_batch)];
+        if(exist(tmp_file_name,'file')==2)
+            record_success(count_batch)=1;
+        end
+    end
+end
+failed_threads{rep_num}=find(record_success==0);
+
+if numel(failed_threads{rep_num})/(num_loop_x*num_loop_y)>0.05
+    error('High fail rate during ray tracing.')
+    %%disp('[Warning]: High fail rate during ray tracing.')
+end
+%%%%%to do%%%%%%
+% loop the failed threads for max 2 or 3 times?
+%%%%%%%%%%%%%%%%
+
+%% trace_recal --> ab profiles under 475nm and 625nm
+num_layer4lightprofile=10;
+%% SAC_licor_blue475nm=[1.14e-4*100, 4.26e4*1e-4];
+RT_x_range=500;
+RT_y_range=25;
+RT_x_perthread=5;
+RT_y_perthread=1;
+num_loop_x=RT_x_range/RT_x_perthread;
+num_loop_y=RT_y_range/RT_y_perthread;
+tmp_bash_cmd=['./trace_recal ',num2str(SAC_licor_blue475nm(1)),' ',num2str(SAC_licor_blue475nm(2)),' count_chl4RT ',...
+    num2str(RT_x_range),' ',num2str(RT_y_range),' ',...
+    num2str(RT_x_perthread),' ',num2str(RT_y_perthread),' ',...
+    'results_abevents_tmpnm_500x_rep',num2str(rep_num),'_ ',...
+    'results_sum_tmpnm_500x_rep',num2str(rep_num),'_ ',...
+    num2str(num_layer4lightprofile),' ',...
+    'results_merged_abtri_475nm_500x_rep',num2str(rep_num),' ',...
+    'results_merged_absrf_475nm_500x_rep',num2str(rep_num),' ',...
+    'results_merged_abprofile_475nm_500x_rep',num2str(rep_num),'_layerN',num2str(num_layer4lightprofile),' ',...
+    'results_merged_rtsum_475nm_500x_rep',num2str(rep_num)];
+system(tmp_bash_cmd);
+%% SAC_licor_red625nm=[2.834e-3*100, 2.34e4*1e-4];
+RT_x_range=500;
+RT_y_range=25;
+RT_x_perthread=5;
+RT_y_perthread=1;
+num_loop_x=RT_x_range/RT_x_perthread;
+num_loop_y=RT_y_range/RT_y_perthread;
+tmp_bash_cmd=['./trace_recal ',num2str(SAC_licor_red625nm(1)),' ',num2str(SAC_licor_red625nm(2)),' count_chl4RT ',...
+    num2str(RT_x_range),' ',num2str(RT_y_range),' ',...
+    num2str(RT_x_perthread),' ',num2str(RT_y_perthread),' ',...
+    'results_abevents_tmpnm_500x_rep',num2str(rep_num),'_ ',...
+    'results_sum_tmpnm_500x_rep',num2str(rep_num),'_ ',...
+    num2str(num_layer4lightprofile),' ',...
+    'results_merged_abtri_625nm_500x_rep',num2str(rep_num),' ',...
+    'results_merged_absrf_625nm_500x_rep',num2str(rep_num),' ',...
+    'results_merged_abprofile_625nm_500x_rep',num2str(rep_num),'_layerN',num2str(num_layer4lightprofile),' ',...
+    'results_merged_rtsum_625nm_500x_rep',num2str(rep_num)];
+system(tmp_bash_cmd);
+
+%% tar intermediate files from ray tracing
+system('tar -zcf results_files_abevents.tar.gz results_abevents_* --remove-files');% tar -zxvf ***.tar.gz; -v = output log
+system('tar -zcf results_files_srf.tar.gz results_srf_* --remove-files');
+system('tar -zcf results_files_sum.tar.gz results_sum_* --remove-files');
+system('tar -zcf results_files_RTlog.tar.gz results_RTlog_* --remove-files');
 
 %% run e-physics
 load ../1.e_geom/CFG.mat

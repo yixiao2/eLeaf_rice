@@ -1,7 +1,7 @@
 % eLeaf: 3D model of rice leaf photosynthesis
 % @license: LGPL (GNU LESSER GENERAL PUBLIC LICENSE Version 3)
-% @author: Yi Xiao <xiaoyi@sippe.ac.cn>
-% @version: 1.2.5
+% @author: Yi Xiao <yixiao20@outlook.com>
+% @version: 1.2.6
 
 %% calculate AVR
 %% prepare for ray tracing
@@ -158,22 +158,28 @@ model.selection('uni1').label('all chlo');
 
 
 %%volume of all chloroplast
-tmp_sel=mphgetselection(model.selection('uni1'));
+tmp_sel=mphgetselection(model.selection('bschlo'));
 tmp_bnd_num=tmp_sel.entities;
 model.geom('geom1').measureFinal.selection.geom('geom1', 3);
 model.geom('geom1').measureFinal.selection.set(tmp_bnd_num);
-all_chlo_vol=model.geom('geom1').measureFinal().getVolume();
-xmax=BSE_width/2+EPU_width+BUT_width/2
-ymax=(EPL_thick+MST_thickatvein+EPU_thick)+0.1e-6
-zmax=LEAF_z
+bsc_chlo_vol=model.geom('geom1').measureFinal().getVolume();
+tmp_sel=mphgetselection(model.selection('mschlo'));
+tmp_bnd_num=tmp_sel.entities;
+model.geom('geom1').measureFinal.selection.geom('geom1', 3);
+model.geom('geom1').measureFinal.selection.set(tmp_bnd_num);
+msc_chlo_vol=model.geom('geom1').measureFinal().getVolume();
+all_chlo_vol=bsc_chlo_vol+msc_chlo_vol;
+xmax=BSE_width/2+EPU_width+BUT_width/2;
+ymax=(EPL_thick+MST_thickatvein+EPU_thick)+0.1e-6;
+zmax=LEAF_z;
 xmin=0;ymin=-0.1e-6;zmin=0;
 leaf_surface_area=xmax*zmax;
-AVR=all_chlo_vol/leaf_surface_area/2
+AVR=all_chlo_vol/leaf_surface_area/2;
 
 %convert [chl] from mg mm-2 to g/m3
 % ([chl]*1e-3*1e6)/(AVR*2)
 %chl_con=0.000664;%mg/mm2
-chl_con4raytracing=chl_con*1e3/(AVR*2)
+%chl_con4raytracing=chl_con*1e3/(AVR*2)
 
 save save_e_geom.mat -regexp '^(?!(model|ans)$).'
 

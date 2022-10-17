@@ -1,6 +1,14 @@
 /***********************************************
-*    version 11/11/11
+*    update 2021 June
+*           - add refr_s
+*           - use sac_o and sac_i instead of absorb
+*           - use I_absorb_tri_o/i instead of I_absorb_tri
+*           - use I_absorb_o/i instead of I_absorb
 *
+*    update 2021 May
+*           - add flag_*
+*  
+*    version 11/11/11
 **********************************************/
 
 #ifndef DEFS_H
@@ -13,8 +21,9 @@ typedef struct t_tri
 {
 	int n[3];	// number of the three points
 	Vec Nor;	// normal vector for the triangle
-	double I_intersect;
-	double I_absorb_tri;
+	double I_intersect; // not used? to revise
+	double I_absorb_tri_o;
+	double I_absorb_tri_i;
 	int count_hit_tri;
 }Triangle;
 
@@ -38,18 +47,19 @@ typedef struct t_obj
 	Surface *S;
 	double refr_index_o;
 	double refr_index_i;
-	double absorb;	// index of absorption
-	double scatter;	// index of scattering
-	double I_absorb;
+	double refr_index_s; // refractive index of surface, currently active for cell wall only, inactive for chlo and vac surface
+	double sac_o;	// index of absorption
+	double sac_i;
+	double scatter;	// index of scattering, NOT USED, to develop
+	double I_absorb_o;
+	double I_absorb_i;
 	struct t_obj* subobj;
 	struct t_obj* nextobj;
 	struct t_obj* belongobj;
-	int celltype;//0->leaf 1/2->spongy_o/i 3->s_chl 4->s_vacuole
-			//5/6->palisade_o/i 7->p_chl 8->p_vacuole
-			//9/10->epidermis_o/i 11/12->epidermis_d_o/i
-	int cellname;// 0 means leaf surface
-	int chlname;// 0 means cell surface
-	int vacuolename;
+	int celltype;//0->leaf; 1->msc cellwall; 2->msc chlo; 4->msc vac; 3->nonms cellwall
+	int cellname;// leaf surface=0
+	int chlname;// cell surface=0
+	int vacuolename;// chlo surface=0
 	int count_hit;
 }Object;
 
@@ -75,16 +85,17 @@ typedef struct t_ray
 	double T;
 	Object *trace_obj;
 	double refr_index;
+	int outin_P;// 1=P is on the inner side of obj; 0=P is on the outter surface of obj
 }Ray;
 
-#define Infinity 1.7E+308
+#define Infinity 1000//1.7E+308
 
 #define PI 3.141592653589793
 
 #define discardI 0.0001
-Object *curobj,*curbelong,*curobj_refl,*curobj_trans;
-int TIR;
-Isect *intersect;
+//Object *GLB_curobj;//,*curbelong,*curobj_refl,*curobj_trans;
+//int TIR;
+//Isect *GLB_intersect;
 
 double I_discard;
 double I_discard_Rf;
@@ -103,6 +114,7 @@ double SAC_chlab;
 double SAC_water;
 double SAC_cellwall;
 double SAC_cyto;
+double SAC_air;
 
 #define air_refr_index 1
 #define wall_refr_index 1.415
@@ -110,39 +122,48 @@ double SAC_cyto;
 #define chlo_refr_index 1.511
 #define vacu_refr_index 1.333
 
-#define DBL_EPSILON (1.835973856023010e-11)
-#define DBL_EPSILON_trisect (1e-100)
+#define DBL_EPSILON (2.2204460492503131e-16)
+#define DIS_EPSILON (5.0e-11)//in eLeaf, model_ddis=0.1e-6, DIS_EPSILON=1e-4*model_ddis. Also modify based on error [trace()-05]
 
 int num_chl_hit;
 double debugI;
 
-#define flag_debug 1
-#define flag_debug_precal 0
-#define flag_debug_printf 0
-#define flag_warning 0
-#define flag_randseed 1
-
-double RT_debug[500][25][512][3];//cutnum_x*cutnum_y*max_buff*{x,y,z}
-int count_RT_debug[500][25];
+#define flag_RTdebug_printf 0 //default=0; =1 debugmode
+#define flag_warningmsg 0 //default=0; =1 debugmode
+#define flag_errormsg 1 //keep 1 even under non-debugging mode
+#define flag_RT_file4plot 0 //default=0; =1 record light paths for plot together with geo
+FILE *fout_file4plot;
+#define flag_randseed 1 //default=1; change to 0 for debug
+#define flag_pertube_dir 1 //default=1, pertubate incident direction within 1 degree
+#define flag_opt_absorbevents 1 // default=1, output absorb events for fast RT recalculation
+FILE *fout_absorbevents;
+#define flag_output_results_tri 0 //default =0, output light absorptance of each triangle in the geometry, notice it will take a lot of disk especially if runs in parallel
+#define flag_output_results_srf 1 //default =1, summarize the absorb_i and absorb_o for each surface
+#define flag_debug_precal 0 //useless now, once used in dev branch
 int ray_i,ray_j;
 
-//#define xmax 9.324500000000001e-05
-//#define xmin 0.0
-//#define zmax 5.437164103349100e-06
-//#define zmin 0.0
-//#define ymax 7.561999999998612e-05
-//#define ymin -0.1e-6
+//#define xmax 9.324359e-05
+//#define xmin 0.000000e+00
+//#define zmax 5.435228e-06
+//#define zmin 0.000000e+00
+//#define ymax 7.561999e-05
+//#define ymin -1.000000e-07
 //
-//#define ms_num 24
+//#define bsc_num 1
+//#define msc_num 23
+//#define msall_num (bsc_num+msc_num)
 //int count_ms;
+//int count_nonms;
 //#define ms_max_chl_num 1
-//int ms_chl_num[ms_num];
-//#define num_nonMS 4
+//int ms_chl_num[msall_num];
+//double ms_chl_con[msall_num];
+//#define nonms_num 4
 //
-//Object *p_cell_ms[ms_num];
-//Object *p_chl_ms[ms_num][ms_max_chl_num];
-//Object *p_vac_ms[ms_num];
+//Object *p_cell_ms[msall_num];
+//Object *p_chl_ms[msall_num][ms_max_chl_num];
+//Object *p_vac_ms[msall_num];
 //Object *p_leaf;
-//Object *p_cell_ns[num_nonMS];
+//Object *p_cell_ns[nonms_num];
 //
 //#endif
+

@@ -2,7 +2,7 @@
 *% eLeaf: 3D model of rice leaf photosynthesis
 *% @license: LGPL (GNU LESSER GENERAL PUBLIC LICENSE Version 3)
 *% @author: Yi Xiao <yixiao20@outlook.com>
-*% @version: 1.2.5
+*% @version: 1.2.6
 **************************************************************/
 
 #ifndef GLOBAL_H
@@ -15,5 +15,6 @@ extern void VecCopy(Vec v1,Vec v2);
 extern double VecDot(Vec v1,Vec v2);
 extern void IsectCopy(Isect *i1,Isect *i2);
 extern void sum_p(void);
+extern int unique_dis(double *all_dis, int vec_size);
 
 #endif
