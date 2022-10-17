@@ -5,10 +5,10 @@ eLeaf is an end-to-end 3D modelling tool for rice leaf photosynthesis. Users jus
 </p>
 
 **[Reference]**
-Xiao Y, Sloan J, Hepworth C, Fradera-Soler M, Mathers A, Thorley R, Baillie A, Jones H, Chang TG, Osborne CP, Chen XY, Sturrock C, Mooney S, Fleming AJ, Zhu X-G. Identifying leaf structure for improved rice performance via eLeaf, an integrated spatial model of photosynthesis. (2021) under review.
+Xiao Y, Sloan J, Hepworth C, Fradera-Soler M, Mathers A, Thorley R, Baillie A, Jones H, Chang TG, Chen XY, Yaapar N, Osborne CP, Sturrock C, Mooney S, Fleming AJ, Zhu X-G. Defining the scope for altering rice leaf anatomy to improve photosynthesis: A modelling approach. (2022) New Phytologist.
 
 ## Getting Started
-In eLeaf model, 3D reconstruction was achieved through COMSOL Multiphysics and MATLAB. Ray tracing was coded in C program. Reaction-diffusion was simulated and solved by COMSOL Multiphysics. All modules were mastered by several MATLAB scripts.  
+In eLeaf model, 3D reconstruction was achieved through operations in COMSOL Multiphysics driven by algorithms coded in MATLAB. Monte-Carlo ray tracing was implemented in C program to simulate light propagation inside the 3D leaf. CO2 Reaction-diffusion was simulated and solved by COMSOL Multiphysics. All these modules were mastered by several MATLAB scripts.  
 
 ### - Prerequisites
 Here we used a tower workstation (2x Intel Xeon E5 2650v4; 48 Cores; 128GB RAM) with CentOS 7 operating system.
@@ -28,7 +28,7 @@ Here we used a tower workstation (2x Intel Xeon E5 2650v4; 48 Cores; 128GB RAM) 
 
 ## Versioning
 
-This is eLeaf code version 1.2.5, first released on Jan. 27th 2021.
+This is eLeaf code version 1.2.6, released on Oct. 17th 2022. 
 
 ## Authors
 
