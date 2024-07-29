@@ -23,13 +23,28 @@
 #include "Trace.h"
 #include "precalculate.h"
 
+double chl_con_MS, chl_con_BS;
+double SAC_water, SAC_chlab, SAC_cyto, SAC_air;
+FILE *fout_file4plot, *fout_absorbevents;
+Object *p_leaf;
+Object *p_cell_ms[msall_num];
+Object *p_chl_ms[msall_num][ms_max_chl_num];
+Object *p_vac_ms[msall_num];
+Object *p_cell_ns[nonms_num];
+double I_discard, I_discard_Rf, I_discard_Tr;
+int num_chl_hit, ray_i, ray_j;
+double debugI;
+int count_ms, count_nonms;
+int ms_chl_num[msall_num];
+double ms_chl_con[msall_num];
+
 int main(int argc, char **argv)
 {
 	/* * * * * * * * * * * * * * * * * * * * * * * * * *
 	 *		Part1. read in the object and precalculate the normal vector
 	 * * * * * * * * * * * * * * * * * * * * * * * * * */
 	time_t start=time(NULL);
-
+	
 	SAC_water=atof(*++argv);//Now, input unit m-1, previously, 1e2*atof(*++argv);
 	SAC_chlab=atof(*++argv);//Now, input unit m2g-1, previously, 1e-4*atof(*++argv);
 	SAC_cyto=SAC_water;

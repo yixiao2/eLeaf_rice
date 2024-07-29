@@ -1,4 +1,6 @@
 /***********************************************
+*    update 2024 July
+*           - use extern to claim global vars
 *    update 2021 June
 *           - add refr_s
 *           - use sac_o and sac_i instead of absorb
@@ -97,9 +99,9 @@ typedef struct t_ray
 //int TIR;
 //Isect *GLB_intersect;
 
-double I_discard;
-double I_discard_Rf;
-double I_discard_Tr;
+extern double I_discard;
+extern double I_discard_Rf;
+extern double I_discard_Tr;
 
 //#define chl_concentration_MS (2.352941e4) //g m^-3
 //#define chl_concentration_BS (2.352941e4) //g m^-3
@@ -107,14 +109,14 @@ double I_discard_Tr;
 //#define SAC_water 0.41
 //#define SAC_cellwall (1.47e6)*(4.38e-4)
 //#define SAC_cyto 0.41
-double chl_con_MS;
-double chl_con_BS;
-double SAC_chlab;
+extern double chl_con_MS;
+extern double chl_con_BS;
+extern double SAC_chlab;
 //double SAC_chlab_BS;
-double SAC_water;
-double SAC_cellwall;
-double SAC_cyto;
-double SAC_air;
+extern double SAC_water;
+extern double SAC_cellwall;
+extern double SAC_cyto;
+extern double SAC_air;
 
 #define air_refr_index 1
 #define wall_refr_index 1.415
@@ -125,22 +127,22 @@ double SAC_air;
 #define DBL_EPSILON (2.2204460492503131e-16)
 #define DIS_EPSILON (5.0e-11)//in eLeaf, model_ddis=0.1e-6, DIS_EPSILON=1e-4*model_ddis. Also modify based on error [trace()-05]
 
-int num_chl_hit;
-double debugI;
+extern int num_chl_hit;
+extern double debugI;
 
 #define flag_RTdebug_printf 0 //default=0; =1 debugmode
 #define flag_warningmsg 0 //default=0; =1 debugmode
 #define flag_errormsg 1 //keep 1 even under non-debugging mode
 #define flag_RT_file4plot 0 //default=0; =1 record light paths for plot together with geo
-FILE *fout_file4plot;
+extern FILE *fout_file4plot;
 #define flag_randseed 1 //default=1; change to 0 for debug
 #define flag_pertube_dir 1 //default=1, pertubate incident direction within 1 degree
 #define flag_opt_absorbevents 1 // default=1, output absorb events for fast RT recalculation
-FILE *fout_absorbevents;
+extern FILE *fout_absorbevents;
 #define flag_output_results_tri 0 //default =0, output light absorptance of each triangle in the geometry, notice it will take a lot of disk especially if runs in parallel
 #define flag_output_results_srf 1 //default =1, summarize the absorb_i and absorb_o for each surface
 #define flag_debug_precal 0 //useless now, once used in dev branch
-int ray_i,ray_j;
+extern int ray_i,ray_j;
 
 //#define xmax 9.324359e-05
 //#define xmin 0.000000e+00
